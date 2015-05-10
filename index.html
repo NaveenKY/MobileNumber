@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Mobile Number Formatter</title>
+		<script src="jquery.min.js"></script>
+		<script src="MobileNumber.js"></script>
+	</head>
+	<body>
+		<div id="mobileNumber"></div>
+		<script>
+			$(function() {
+				$("#mobileNumber").mobileNumber({
+					format: "XXX-XXXX-XXXXXX"
+				});
+				$("#mobileNumber").mobileNumber('set','91-98765-43210');
+				alert($("#mobileNumber").mobileNumber('get'));
+			});
+		</script>
+	</body>
+</html>
+
