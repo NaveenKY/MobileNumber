@@ -41,6 +41,9 @@
 			});
 			this.element.innerHTML = '';
 			this.element.innerHTML = $input;
+			if(this.settings.number){
+				this.set(this.settings.number);
+			}
 		},
 		set: function(value) {
 			var $chunks = $(this.element).children();
@@ -61,10 +64,10 @@
 		},
 		get: function(value) {
 			var $chunks = $(this.element).children();
-			var number = '';
+			var number = '', that=this;
 			$chunks.toArray().forEach(function($input, index){
 				number+= $input.value;
-				if(index < $chunks.length-1) {number+='-';}
+				if(index < $chunks.length-1) {number+=that.settings.delimiter;}
 			});
 			return number;
 		}
