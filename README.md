@@ -1,2 +1,2 @@
 # MobileNumber
-A small JavaScript Component for Creating dynamic Inputs for Mobile Number Format
+A Small JavaScript Component for Creating dynamic Inputs for Mobile Number Format
