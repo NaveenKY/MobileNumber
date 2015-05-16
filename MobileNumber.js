@@ -11,7 +11,7 @@
 		defaults = {
 			format: "XX-XXXXXXXXXX",
 			delimiter: '-',
-			width: 250
+			width: 190
 	};
 
 	// The actual MobileNumber constructor
@@ -36,7 +36,7 @@
 			formatArray.forEach(function(chunk, index){
 				$input += '<input type="text" id="'+that.element.id+'_'+index+'" class="'+className+'" style="width:'+perNumberWidth*chunk.length+'px;" />';
 				if(index != (formatArray.length-1)) {
-					$input += ' '+that.settings.delimiter+' ';
+					$input += '<span style="display:inline-block;text-align:center;width:'+perNumberWidth+'px;">'+that.settings.delimiter+'</span>';
 				}
 			});
 			this.element.innerHTML = '';
@@ -46,7 +46,7 @@
 			}
 		},
 		set: function(value) {
-			var $chunks = $(this.element).children();
+			var $chunks = $(this.element).children('input');
 			var number = value.split('-');
 			if(number.length <= $chunks.length) {
 				$chunks.toArray().forEach(function($input, index){
@@ -63,13 +63,42 @@
 			}
 		},
 		get: function(value) {
-			var $chunks = $(this.element).children();
+			var $chunks = $(this.element).children('input');
 			var number = '', that=this;
 			$chunks.toArray().forEach(function($input, index){
 				number+= $input.value;
 				if(index < $chunks.length-1) {number+=that.settings.delimiter;}
 			});
 			return number;
+		},
+		isValid: function() {
+			var $chunks = $(this.element).children('input'), that=this, valid=true;
+			var formatArray = this.settings.format.split("-");
+			var $group = $(that.element).parent();
+			$chunks.toArray().forEach(function($input, index){
+				if(isNaN($input.value) || $input.value.length != formatArray[index].length) {
+					$group.removeClass('has-success').addClass('has-error');
+					$group.find('.help-block').html("Mobile number must match the format "+that.settings.format+" and should contains only digit").removeClass('hidden');
+					valid = false;
+				}
+			});
+			if(valid) {
+				$group.removeClass('has-error').addClass('has-success');
+				$group.find('.help-block').html('').addClass('hidden');
+			}
+			return valid;
+		},
+		enable: function() {
+			var $chunks = $(this.element).children('input');
+			$chunks.toArray().forEach(function($input, index){
+				$input.disabled = false;
+			});
+		},
+		disable: function(value) {
+			var $chunks = $(this.element).children('input');
+			$chunks.toArray().forEach(function($input, index){
+				$input.disabled = true;
+			});
 		}
 	});
 
@@ -82,7 +111,7 @@
 			data = $this.data("plugin_" + mobileNumber),
 	                options = $.extend({}, MobileNumber.defaults, typeof option === 'object' && option);
         	    if (typeof option === 'string') {
-			if ($.inArray(option, ["set", "get"]) < 0) {
+			if ($.inArray(option, ["set", "get", "isValid", "enable", "disable"]) < 0) {
                 	    throw new Error("Unknown method: " + option);
                 	}
 	                value = data[option](_relatedTarget);
@@ -93,6 +122,6 @@
         	});
 	        return typeof value === 'undefined' ? this : value;
 	};
-	$.fn.mobileNumber.methods = ["set", "get"];
+	$.fn.mobileNumber.methods = ["set", "get", "isValid", "enable", "disable"];
 
 })( jQuery, window, document );
