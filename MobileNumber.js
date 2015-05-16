@@ -39,6 +39,7 @@
 					$input += '<span style="display:inline-block;text-align:center;width:'+perNumberWidth+'px;">'+that.settings.delimiter+'</span>';
 				}
 			});
+			$input += '<span class="invalid-message" style="display:none;color:rgb(169, 68, 66);font-size:0.9em;width:'+this.settings.width+'px;"></span>';
 			this.element.innerHTML = '';
 			this.element.innerHTML = $input;
 			if(this.settings.number){
@@ -77,14 +78,19 @@
 			var $group = $(that.element).parent();
 			$chunks.toArray().forEach(function($input, index){
 				if(isNaN($input.value) || $input.value.length != formatArray[index].length) {
-					$group.removeClass('has-success').addClass('has-error');
-					$group.find('.help-block').html("Mobile number must match the format "+that.settings.format+" and should contains only digit").removeClass('hidden');
 					valid = false;
 				}
 			});
 			if(valid) {
-				$group.removeClass('has-error').addClass('has-success');
-				$group.find('.help-block').html('').addClass('hidden');
+				$(this.element).children('input').css({
+					'border': 'solid 1px green'
+				});
+				$(this.element).children('.invalid-message').html('').css('display','none');
+			} else {
+				$(this.element).children('input').css({
+					'border': 'solid 1px rgb(169, 68, 66)'
+				});
+				$(this.element).children('.invalid-message').html('Mobile number must match the format '+that.settings.format+' and should contains only digit').css('display','block');
 			}
 			return valid;
 		},
@@ -102,6 +108,13 @@
 		}
 	});
 
+	var allMethods = [
+		"set",
+		"get",
+		"isValid",
+		"enable",
+		"disable"
+	];
 	// A really lightweight plugin wrapper around the constructor,
 	// preventing against multiple instantiations
 	$.fn.mobileNumber = function (option, _relatedTarget) {
@@ -111,7 +124,7 @@
 			data = $this.data("plugin_" + mobileNumber),
 	                options = $.extend({}, MobileNumber.defaults, typeof option === 'object' && option);
         	    if (typeof option === 'string') {
-			if ($.inArray(option, ["set", "get", "isValid", "enable", "disable"]) < 0) {
+			if ($.inArray(option, allMethods) < 0) {
                 	    throw new Error("Unknown method: " + option);
                 	}
 	                value = data[option](_relatedTarget);
@@ -122,6 +135,6 @@
         	});
 	        return typeof value === 'undefined' ? this : value;
 	};
-	$.fn.mobileNumber.methods = ["set", "get", "isValid", "enable", "disable"];
+	$.fn.mobileNumber.methods = allMethods;
 
 })( jQuery, window, document );
