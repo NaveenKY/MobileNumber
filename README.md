@@ -11,5 +11,5 @@ A Small JavaScript Component for Creating dynamic Inputs for Mobile Number Forma
 ### Setting the value :
       $("#mobileNumber").mobileNumber('set','91-98765-43210');
 
-### Getting enetered value :
+### Getting entered value :
       $("#mobileNumber").mobileNumber('get')
