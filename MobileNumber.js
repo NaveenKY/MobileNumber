@@ -34,7 +34,7 @@
 			var $input = '', that=this;
 			var perNumberWidth = this.settings.width / this.settings.format.length;
 			formatArray.forEach(function(chunk, index){
-				$input += '<input type="text" id="'+that.element.id+'_'+index+'" class="'+className+'" style="width:'+perNumberWidth*chunk.length+'px;" />';
+				$input += '<input type="text" id="'+that.element.id+'_'+index+'" class="'+className+'" maxLength="'+chunk.length+'"style="width:'+perNumberWidth*chunk.length+'px;" />';
 				if(index != (formatArray.length-1)) {
 					$input += '<span style="display:inline-block;text-align:center;width:'+perNumberWidth+'px;">'+that.settings.delimiter+'</span>';
 				}
